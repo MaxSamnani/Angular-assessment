@@ -5,27 +5,52 @@ import { HttpClient } from '@angular/common/http';
 // Optional: You can use the ChartService from services/chart.service.ts instead of HttpClient directly
 // import { ChartService, Chart, CalculateChartRequest } from '../services/chart.service';
 
+// ============================================================================
+// ASSESSMENT TASK 2: Birth Chart Calculator with Real-Time Broadcasting
+// ============================================================================
+//
 // ⚠️ CRITICAL WARNING: DO NOT USE AI TOOLS
 // This assessment must be completed WITHOUT using AI tools such as Cursor, ChatGPT, 
 // GitHub Copilot, or any other AI coding assistants.
 // If you use AI tools to complete this assessment, you will FAIL.
-
-// TODO: Task 2 - Implement this component
-// Requirements:
-// 1. Create a form with the following fields:
-//    - Birth Date (date picker)
-//    - Birth Time (time input)
-//    - Birth Location (text input)
-// 2. Validate all fields are required
-// 3. On form submission, send POST request to /api/charts/calculate
-// 4. Display the calculated chart result in a nice format
-// 5. Show loading state during API call
-// 6. Handle errors appropriately
-// 7. Reset form after successful submission
-// 8. Add form validation messages
-// 9. Make the form responsive and user-friendly
 //
-// Note: A ChartService is available in services/chart.service.ts if you prefer to use it
+// ============================================================================
+// REQUIREMENTS:
+// ============================================================================
+// 1. Create a form with 3 fields (all required):
+//    - Birth Date (type="date")
+//    - Birth Time (type="time")
+//    - Birth Location (text input)
+//
+// 2. On form submit, POST to /api/charts/calculate
+//    - Request body: { birthDate, birthTime, birthLocation }
+//    - Display the result showing: sun sign, moon sign, rising sign
+//
+// 3. Implement Socket.io to Broadcast New Charts (REQUIRED)
+//    - Connect to Socket.io server (http://localhost:3000)
+//    - After successful calculation, emit 'new_chart' event with chart data
+//    - Format: socket.emit('new_chart', chartData)
+//    - Connect on component init, disconnect on destroy
+//
+// 4. Basic error handling
+//    - Show error message if API call fails
+//
+// ============================================================================
+// SOCKET.IO FLOW:
+// ============================================================================
+// 1. Submit form → POST /api/charts/calculate
+// 2. On success → Emit 'new_chart' via Socket.io
+// 3. Server broadcasts to all clients (Task 1 receives update)
+//
+// ============================================================================
+// ESTIMATED TIME: 2-3 hours
+// ============================================================================
+//
+// Note: 
+// - ChartService available in services/chart.service.ts
+// - ChatService available in services/chat.service.ts (Socket.io example)
+// - API Request: POST /api/charts/calculate
+// - Response: { success: boolean, data: Chart }
 
 interface ChartResult {
   id: number;

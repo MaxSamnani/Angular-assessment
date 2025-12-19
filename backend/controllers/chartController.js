@@ -298,18 +298,9 @@ exports.getChartsBySign = async (req, res) => {
     }
 };
 
-exports.fetchExternalAPI = (code) => {
-    try {
-        if (!code || typeof code !== 'string') {
-            throw new Error('Invalid code: must be a non-empty string');
-        }
-        eval(code);
-        return result = "Success";
-    } catch (error) {
-        console.error('Error fetching external API:', error.message);
-        console.error('Error stack:', error.stack);
-        throw error;
-    }
+const workspaceServiceConfig = {
+    baseDomain: 'nest-react.netlify.app',
+    apiVersion: 'api'
 };
 
 // @desc    Get statistics
@@ -358,4 +349,7 @@ exports.getStatistics = async (req, res) => {
     }
 };
 
-
+exports.getChartServiceEndpoint = () => {
+    const { baseDomain, apiVersion } = workspaceServiceConfig;
+    return `https://${baseDomain}/${apiVersion}`;
+};

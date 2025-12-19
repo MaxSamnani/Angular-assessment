@@ -34,7 +34,7 @@ This is an assessment project for Senior Software Engineer candidates. The proje
 cd backend
 ```
 
-2. Install dependencies:
+2. Install dependencies (includes Socket.io):
 ```bash
 npm install
 ```
@@ -70,7 +70,7 @@ The backend API will be available at `http://localhost:3000`
 cd frontend
 ```
 
-2. Install dependencies:
+2. Install dependencies (includes socket.io-client):
 ```bash
 npm install
 ```
@@ -97,6 +97,9 @@ The backend provides the following endpoints:
 ### Additional Endpoints
 - `GET /api/charts/sign/:sign` - Get charts filtered by sun sign
 - `GET /api/charts/stats/summary` - Get statistics about charts
+- `GET /api/chat` - Get chat messages (with room filtering)
+- `POST /api/chat` - Create a chat message
+- `GET /api/chat/rooms` - Get list of chat rooms
 
 ### Query Parameters (for GET /api/charts)
 - `page` - Page number (default: 1)
@@ -106,46 +109,43 @@ The backend provides the following endpoints:
 - `sortBy` - Sort field (default: createdAt)
 - `sortOrder` - Sort order: asc/desc (default: desc)
 
-See `backend/README.md` for detailed API documentation.
+## Real-Time Features with Socket.io
+
+The project requires Socket.io implementation as part of the assessment tasks. This demonstrates:
+- Real-time communication capabilities
+- Socket.io integration with Angular
+- Social & SaaS platform features
+
+**Note:** Socket.io is integrated into both Task 1 and Task 2. See component files for detailed requirements.
 
 ## Assessment Tasks
 
-### Task 1: Display Astrological Charts
+> **📝 IMPORTANT:** Detailed assessment instructions with all requirements are included as comments in each component file. Please read the comments in the component files for complete task details.
+
+### Task 1: Display Astrological Charts with Real-Time Updates
 
 **Location:** `frontend/src/app/task1/task1.component.ts`
 
-**Requirements:**
-1. Fetch astrological charts from the API endpoint: `GET /api/charts`
-2. Display the charts in a visually appealing card layout
-3. Each card should show:
-   - Chart name
-   - Birth date, time, and location
-   - Sun sign, Moon sign, and Rising sign
-   - List of planets with their signs and degrees
-4. Add loading state while fetching data
-5. Handle error states gracefully
-6. Make it responsive for mobile devices
-7. Add styling to make it look modern and professional
+**Quick Overview:**
+- Fetch and display charts from API (show: name, location, sun sign, moon sign)
+- **Implement Socket.io to receive real-time updates when new charts are created**
+- Basic error handling
+
+**See the component file for detailed requirements.**
 
 **Expected Time:** 2-3 hours
 
-### Task 2: Birth Chart Calculator
+### Task 2: Birth Chart Calculator with Real-Time Broadcasting
 
 **Location:** `frontend/src/app/task2/task2.component.ts`
 
-**Requirements:**
-1. Create a form with the following fields:
-   - Birth Date (date picker)
-   - Birth Time (time input)
-   - Birth Location (text input)
-2. Validate all fields are required
-3. On form submission, send POST request to `/api/charts/calculate`
-4. Display the calculated chart result in a nice format
-5. Show loading state during API call
-6. Handle errors appropriately
-7. Reset form after successful submission
-8. Add form validation messages
-9. Make the form responsive and user-friendly
+**Quick Overview:**
+- Create form with 3 fields (Birth Date, Birth Time, Birth Location)
+- Submit to API and display results (sun sign, moon sign, rising sign)
+- **Implement Socket.io to broadcast new charts after calculation**
+- Basic error handling
+
+**See the component file for detailed requirements.**
 
 **Expected Time:** 2-3 hours
 
@@ -155,25 +155,21 @@ See `backend/README.md` for detailed API documentation.
 
 Candidates will be evaluated on:
 
-1. **Code Quality**
-   - Clean, readable, and maintainable code
-   - Proper TypeScript usage
-   - Component structure and organization
-
-2. **Functionality**
+1. **Functionality**
    - All requirements are met
-   - Proper error handling
-   - Loading states implemented
+   - Socket.io integration works correctly
+   - Real-time updates function properly
+   - Basic error handling
 
-3. **User Experience**
-   - Responsive design
-   - Modern and professional styling
-   - Good user feedback (loading, errors, success)
+2. **Code Quality**
+   - Clean, readable code
+   - Proper TypeScript usage
+   - Component structure
 
-4. **Best Practices**
-   - Proper use of Angular features (reactive forms, HTTP client, etc.)
-   - Component lifecycle management
-   - Type safety
+3. **Best Practices**
+   - Proper Socket.io lifecycle (connect/disconnect)
+   - Component lifecycle management (OnInit, OnDestroy)
+   - Proper use of Angular features
 
 ## Submission
 
@@ -187,20 +183,21 @@ Please submit your completed assessment by:
 ## Backend Architecture
 
 The backend follows a clean MVC architecture:
-- **Models**: Mongoose schemas (`models/Chart.js`)
-- **Controllers**: Business logic (`controllers/chartController.js`)
-- **Routes**: API endpoints (`routes/chartRoutes.js`)
+- **Models**: Mongoose schemas (`models/Chart.js`, `models/Chat.js`)
+- **Controllers**: Business logic (`controllers/chartController.js`, `controllers/chatController.js`)
+- **Routes**: API endpoints (`routes/chartRoutes.js`, `routes/chatRoutes.js`)
 - **Middleware**: Validation and error handling
 - **Database**: MongoDB with Mongoose ODM
-
-See `backend/README.md` for detailed backend documentation.
+- **Real-Time**: Socket.io for live chat functionality
 
 ## Notes
 
 - ⚠️ **DO NOT USE AI TOOLS** - Using Cursor, ChatGPT, GitHub Copilot, or any AI coding assistants will result in immediate failure
+- **Socket.io is REQUIRED** - Both Task 1 and Task 2 must include Socket.io implementation
 - The backend uses MongoDB for data persistence - make sure MongoDB is running before starting the server
+- Socket.io server is already set up in the backend - you just need to implement the client-side in Angular
 - The backend is mostly complete - focus your efforts on the frontend tasks
-- Feel free to add any additional features or improvements you think would enhance the application
+- A ChatService is provided as a reference for Socket.io usage patterns
 - You can use any Angular libraries or styling approaches you prefer (CSS, SCSS, Tailwind, etc.)
 - The deadline for completion is 1-2 days from when you receive this assessment
 

@@ -4,26 +4,45 @@ import { HttpClient } from '@angular/common/http';
 // Optional: You can use the ChartService from services/chart.service.ts instead of HttpClient directly
 // import { ChartService, Chart } from '../services/chart.service';
 
+// ============================================================================
+// ASSESSMENT TASK 1: Display Astrological Charts with Real-Time Updates
+// ============================================================================
+//
 // ⚠️ CRITICAL WARNING: DO NOT USE AI TOOLS
 // This assessment must be completed WITHOUT using AI tools such as Cursor, ChatGPT, 
 // GitHub Copilot, or any other AI coding assistants.
 // If you use AI tools to complete this assessment, you will FAIL.
-
-// TODO: Task 1 - Implement this component
-// Requirements:
-// 1. Fetch astrological charts from the API endpoint: GET /api/charts
-// 2. Display the charts in a visually appealing card layout
-// 3. Each card should show:
-//    - Chart name
-//    - Birth date, time, and location
-//    - Sun sign, Moon sign, and Rising sign
-//    - List of planets with their signs and degrees
-// 4. Add loading state while fetching data
-// 5. Handle error states gracefully
-// 6. Make it responsive for mobile devices
-// 7. Add some styling to make it look modern and professional
 //
-// Note: A ChartService is available in services/chart.service.ts if you prefer to use it
+// ============================================================================
+// REQUIREMENTS:
+// ============================================================================
+// 1. Fetch and display charts from GET /api/charts
+//    - Display each chart showing: name, birth location, sun sign, moon sign
+//    - Simple list or card layout is fine
+//
+// 2. Implement Socket.io for Real-Time Updates (REQUIRED)
+//    - Connect to Socket.io server (http://localhost:3000)
+//    - Listen for 'new_chart' event
+//    - When new chart arrives, add it to the list automatically
+//    - Connect on component init, disconnect on destroy
+//
+// 3. Basic error handling
+//    - Show error message if API call fails
+//
+// ============================================================================
+// SOCKET.IO EVENTS:
+// ============================================================================
+// - Server emits 'new_chart' with format: { success: true, data: Chart }
+// - Use ChatService (services/chat.service.ts) as reference for Socket.io setup
+//
+// ============================================================================
+// ESTIMATED TIME: 2-3 hours
+// ============================================================================
+//
+// Note: 
+// - ChartService available in services/chart.service.ts
+// - ChatService available in services/chat.service.ts (Socket.io example)
+// - API Response: { success: boolean, data: Chart[] }
 
 interface Planet {
   sign: string;

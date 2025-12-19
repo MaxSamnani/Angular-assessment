@@ -10,10 +10,11 @@ import { ChartService } from './services/chart.service';
     template: `
     <div class="app-container">
       <header class="app-header">
-        <h1>Terri Quintel Astrology</h1>
+        <h1>🌟 Terri Quintel Astrology - Social & SaaS Platform</h1>
         <nav>
-          <a routerLink="/task1" routerLinkActive="active">Task 1</a>
-          <a routerLink="/task2" routerLinkActive="active">Task 2</a>
+          <a routerLink="/chat" routerLinkActive="active">💬 Live Chat</a>
+          <a routerLink="/task1" routerLinkActive="active">Charts</a>
+          <a routerLink="/task2" routerLinkActive="active">Calculator</a>
         </nav>
       </header>
       <main class="app-main">
