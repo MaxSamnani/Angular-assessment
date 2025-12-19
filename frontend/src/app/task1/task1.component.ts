@@ -68,10 +68,9 @@ interface Chart {
 }
 
 @Component({
-  selector: 'app-task1',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
+    selector: 'app-task1',
+    imports: [CommonModule],
+    template: `
     <div class="task1-container">
       <h2>Task 1: Display Astrological Charts</h2>
       <p class="task-description">
@@ -85,7 +84,7 @@ interface Chart {
       </div>
     </div>
   `,
-  styles: [`
+    styles: [`
     .task1-container {
       max-width: 1000px;
       margin: 0 auto;

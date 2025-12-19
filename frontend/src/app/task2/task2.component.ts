@@ -71,10 +71,9 @@ interface ChartResult {
 }
 
 @Component({
-  selector: 'app-task2',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
-  template: `
+    selector: 'app-task2',
+    imports: [CommonModule, ReactiveFormsModule],
+    template: `
     <div class="task2-container">
       <h2>Task 2: Birth Chart Calculator</h2>
       <p class="task-description">
@@ -88,7 +87,7 @@ interface ChartResult {
       </div>
     </div>
   `,
-  styles: [`
+    styles: [`
     .task2-container {
       max-width: 800px;
       margin: 0 auto;

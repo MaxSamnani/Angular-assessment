@@ -35,10 +35,9 @@ import { ChatService, ChatMessage } from '../services/chat.service';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-chat',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
-  template: `
+    selector: 'app-chat',
+    imports: [CommonModule, FormsModule],
+    template: `
     <div class="chat-container">
       <div class="chat-header">
         <h2>💬 Live Chat - Terri Quintel Astrology</h2>
@@ -95,7 +94,7 @@ import { Subscription } from 'rxjs';
       </div>
     </div>
   `,
-  styles: [`
+    styles: [`
     .chat-container {
       display: flex;
       flex-direction: column;

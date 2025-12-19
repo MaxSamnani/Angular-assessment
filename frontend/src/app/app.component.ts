@@ -5,7 +5,6 @@ import { ChartService } from './services/chart.service';
 
 @Component({
     selector: 'app-root',
-    standalone: true,
     imports: [RouterOutlet, RouterLink, RouterLinkActive, CommonModule],
     template: `
     <div class="app-container">
