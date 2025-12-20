@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { io, Socket } from 'socket.io-client';
+import { OnInit, OnDestroy } from '@angular/core';
 // Optional: You can use the ChartService from services/chart.service.ts instead of HttpClient directly
 // import { ChartService, Chart, CalculateChartRequest } from '../services/chart.service';
 
@@ -71,9 +73,9 @@ interface ChartResult {
 }
 
 @Component({
-    selector: 'app-task2',
-    imports: [CommonModule, ReactiveFormsModule],
-    template: `
+  selector: 'app-task2',
+  imports: [CommonModule, ReactiveFormsModule],
+  template: `
     <div class="task2-container">
       <h2>Task 2: Birth Chart Calculator</h2>
       <p class="task-description">
@@ -82,12 +84,37 @@ interface ChartResult {
       </p>
       
       <!-- TODO: Implement the form and result display here -->
-      <div class="placeholder">
+      <!--<div class="placeholder">
         <p>Your implementation goes here...</p>
+      </div> -->
+    <form [formGroup]="form" (ngSubmit)="onsubmit()">
+      <div>
+        <label for="birthDate">Birth Date:</label>
+        <input type="date" id="birthDate" formControlName="birthDate" required>
       </div>
+      <div>
+        <label for="birthTime">Birth Time:</label>
+        <input type="time" id="birthTime" formControlName="birthTime" required>
+      </div>
+      <div>
+        <label for="birthLocation">Birth Location:</label>
+        <input type="text" id="birthLocation" formControlName="birthLocation" required>
+      </div>
+      <button type="submit" [disabled]="form.invalid">Calculate Chart</button>
+    </form>
+
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="result" class="chart-result">
+      <h3>Your Birth Chart</h3>
+      <p><strong>Sun Sign:</strong> {{ result.sunSign }}</p>
+      <p><strong>Moon Sign:</strong> {{ result.moonSign }}</p>
+      <p><strong>Rising Sign:</strong> {{ result.risingSign }}</p>
     </div>
   `,
-    styles: [`
+  styles: [`
     .task2-container {
       max-width: 800px;
       margin: 0 auto;
@@ -105,12 +132,51 @@ interface ChartResult {
     }
   `]
 })
-export class Task2Component {
-  // TODO: Add your implementation here
+export class Task2Component implements OnInit, OnDestroy {
+  
+  form!: FormGroup;
+  result: ChartResult | null = null;
+  error = '';
+  private socket!: Socket;
 
   constructor(
     private fb: FormBuilder,
     private http: HttpClient
-  ) {}
-}
+  ) { }
+  ngOnInit() {
 
+    this.form = this.fb.group({
+      birthDate: ['', Validators.required],
+      birthTime: ['', Validators.required],
+      birthLocation: ['', Validators.required],
+    });
+    this.socket = io('http://localhost:3000');
+  }
+  onsubmit(): void {
+
+    if (this.form.invalid) {
+      return;
+    }
+    
+    this.error = '';
+    this.result = null;
+
+    this.http.post<any>(`/api/charts/calculate`, this.form.value).subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          this.result = response.data;
+          this.socket.emit('new_chart', response.data);
+        }
+      },
+      error: (error) => {
+        console.error('Error calculating chart:', error);
+        this.error = 'Failed to calculate chart. Please try again later.';
+      }
+    });
+  }
+  ngOnDestroy(): void {
+    if (this.socket) {
+      this.socket.disconnect();
+    }
+  }
+}

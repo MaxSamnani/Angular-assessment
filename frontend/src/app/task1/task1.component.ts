@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { io, Socket } from 'socket.io-client';
+import { OnDestroy } from '@angular/core';
 // Optional: You can use the ChartService from services/chart.service.ts instead of HttpClient directly
 // import { ChartService, Chart } from '../services/chart.service';
 
@@ -68,9 +70,9 @@ interface Chart {
 }
 
 @Component({
-    selector: 'app-task1',
-    imports: [CommonModule],
-    template: `
+  selector: 'app-task1',
+  imports: [CommonModule],
+  template: `
     <div class="task1-container">
       <h2>Task 1: Display Astrological Charts</h2>
       <p class="task-description">
@@ -79,12 +81,22 @@ interface Chart {
       </p>
       
       <!-- TODO: Implement the chart display here -->
-      <div class="placeholder">
+      <!--<div class="placeholder">
         <p>Your implementation goes here...</p>
+      </div>-->
+      <div *ngIf="error" class="error">{{ error }}</div>
+      <div *ngFor="let chart of charts">
+        <div class="chart-card">
+          <h3>{{ chart.name }}</h3>
+          <p>Location: {{ chart.birthLocation }}</p>
+          <p>Sun Sign: {{ chart.sunSign }}</p>
+          <p>Moon Sign: {{ chart.moonSign }}</p>
+          <hr />
+        </div>
       </div>
     </div>
   `,
-    styles: [`
+  styles: [`
     .task1-container {
       max-width: 1000px;
       margin: 0 auto;
@@ -102,13 +114,38 @@ interface Chart {
     }
   `]
 })
-export class Task1Component implements OnInit {
-  // TODO: Add your implementation here
+export class Task1Component implements OnInit, OnDestroy {
 
-  constructor(private http: HttpClient) {}
+  charts: Chart[] = [];
+  error = '';
+  private socket!: Socket;
+  constructor(private http: HttpClient) { }
 
   ngOnInit() {
     // TODO: Fetch charts from API
+    this.http.get<any>('/api/charts').subscribe({
+      next: (response) => {
+        if (response.success && response.data) {
+          // Process charts here
+          this.charts = response.data;
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching charts:', error);
+        this.error = 'Failed to fetch charts. Please try again later.';
+      }
+    });
+    this.socket = io('http://localhost:3000');
+    this.socket.on('new_chart', (payload: any) => {
+      if (payload?.data) {
+        this.charts.unshift(payload.data);
+      }
+    });
+  }
+
+  ngOnDestroy(): void {
+    if (this.socket) {
+      this.socket.disconnect();
+    }
   }
 }
-
